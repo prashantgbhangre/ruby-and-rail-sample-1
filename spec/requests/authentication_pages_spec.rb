@@ -55,7 +55,7 @@ describe "Authentication" do
                 end
               end
 
-        describe "in the Users controller" do
+              describe "in the Users controller" do
 
           describe "visiting the edit page" do
             before { visit edit_user_path(user) }
@@ -72,17 +72,30 @@ describe "Authentication" do
             specify { expect(response).to redirect_to(signin_path) }
           end
         end
-      end
+       
+              describe "in the Microposts controller" do
+
+              describe "submitting to the create action" do
+                        before { post microposts_path }
+                        specify { expect(response).to redirect_to(signin_path) }
+                      end
+
+              describe "submitting to the destroy action" do
+                        before { delete micropost_path(FactoryGirl.create(:micropost)) }
+                        specify { expect(response).to redirect_to(signin_path) }
+                      end
+        end
+        end
     end
     
-  describe "signin page" do
+    describe "signin page" do
     before { visit signin_path }
 
     it { should have_content('Sign in') }
     it { should have_title('Sign in') }
   end
   
-  describe "signin" do
+     describe "signin" do
       before { visit signin_path }
 
       describe "with invalid information" do
@@ -106,14 +119,14 @@ describe "Authentication" do
             describe "followed by signout" do
                     before { click_link "Sign out" }
                     it { should have_link('Sign in') }
-                  end
+            end
             
-          end
+      end
           
-          describe "after visiting another page" do
+      describe "after visiting another page" do
                   before { click_link "Home" }
                   it { should_not have_selector('div.alert.alert-error') }
-                end
-    end
+          end
+  end
     
 end

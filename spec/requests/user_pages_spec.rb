@@ -4,7 +4,7 @@ describe "UserPages" do
   subject { page }
   
   
-  describe "index" do
+   describe "index" do
       let(:user) { FactoryGirl.create(:user) }
           before do
                 sign_in user
@@ -26,9 +26,9 @@ describe "UserPages" do
                     expect(page).to have_selector('li', text: user.name)
                   end
                 end
-              end
+          end
               
-              describe "delete links" do
+          describe "delete links" do
 
                     it { should_not have_link('delete') }
 
@@ -47,7 +47,7 @@ describe "UserPages" do
                       end
                       it { should_not have_link('delete', href: user_path(admin)) }
                     end
-                  end
+                end
 
       it "should list each user" do
         User.all.each do |user|
@@ -102,9 +102,9 @@ describe "UserPages" do
           expect { click_button submit }.to change(User, :count).by(1)
         end
       end
-    end
+   end
     
-    describe "edit" do
+   describe "edit" do
         let(:user) { FactoryGirl.create(:user) }
         before do
               sign_in user
@@ -127,19 +127,36 @@ describe "UserPages" do
                   it { should have_link('Sign out', href: signout_path) }
                   specify { expect(user.reload.name).to  eq new_name }
                   specify { expect(user.reload.email).to eq new_email }
-                end
+            end
                 
-        describe "page" do
+            describe "page" do
           it { should have_content("Update your profile") }
           it { should have_title("Edit user") }
           it { should have_link('change', href: 'http://gravatar.com/emails') }
         end
 
-        describe "with invalid information" do
+            describe "with invalid information" do
           before { click_button "Save changes" }
 
           it { should have_content('error') }
         end
-      end
+    end
+
+   describe "profile page" do
+        let(:user) { FactoryGirl.create(:user) }
+        let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
+        let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Bar") }
+
+        before { visit user_path(user) }
+
+        it { should have_content(user.name) }
+        it { should have_title(user.name) }
+
+        describe "microposts" do
+          it { should have_content(m1.content) }
+          it { should have_content(m2.content) }
+          it { should have_content(user.microposts.count) }
+        end
+  end
 end
   
