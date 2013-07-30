@@ -39,6 +39,7 @@ describe "Authentication" do
         describe "for non-signed-in users" do
               let(:user) { FactoryGirl.create(:user) }
 
+              
               describe "when attempting to visit a protected page" do
                 before do
                   visit edit_user_path(user)
@@ -57,6 +58,16 @@ describe "Authentication" do
 
               describe "in the Users controller" do
 
+                describe "visiting the following page" do
+                          before { visit following_user_path(user) }
+                          it { should have_title('Sign in') }
+                end
+
+                describe "visiting the followers page" do
+                          before { visit followers_user_path(user) }
+                          it { should have_title('Sign in') }
+                end
+                        
           describe "visiting the edit page" do
             before { visit edit_user_path(user) }
             it { should have_title('Sign in') }
